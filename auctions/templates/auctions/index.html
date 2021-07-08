@@ -2,6 +2,17 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
+    <ul>
+        {% for listing in listings %}
+            {% if listing.active == True %}
+                <li>
+                    <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                    <img src="{{ listing.image }}" >
+                </li>
+                
+            {% endif %}
+            
+        {% endfor %}
+    </ul>
     TODO
 {% endblock %}

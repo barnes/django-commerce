@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Listing: {{ listing.title }}</h2>
+    {% if user.is_authenticated %}
+        <form action="{% url 'wishlist' listing.id %}" method="POST">
+            {% csrf_token %}
+            
+                <input type="submit" value="Wishlist" method="POST">
+
+                <p>already in lsit</p>
+
+        </form>
+    {% endif %}
+    
+
+    
+
+
+{% endblock %}

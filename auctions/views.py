@@ -9,7 +9,9 @@ from .models import User, Listing
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.all()
+    })
 
 
 def login_view(request):
@@ -75,3 +77,19 @@ def newListing(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/newListing.html")
+
+def listing(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    }) 
+
+def wishlist(request,listing_id):
+    if request.method == "POST":
+        currentUser = request.user
+        # Add to wishlist table attached to each user?
+        user = User.objects.get(pk=currentUser.id)
+        listing = Listing.objects.get(pk=listing_id)
+        user.wishlist.add(listing)
+        print(user.wishlist.objects.all())
+    return HttpResponseRedirect(reverse("index"))
