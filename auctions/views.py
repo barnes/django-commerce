@@ -4,8 +4,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
+from django import forms
 from .models import User, Listing
+
+# Not in use; need to know how to apply Bootstrap styles to auto-generated forms.
+class NewListingForm(forms.Form):
+    title = forms.CharField(label="Title")
+    description = forms.CharField(label="description")
+    image = forms.CharField(label="Image URL")
+    startingBid = forms.IntegerField(label="Starting Bid")
+
 
 
 def index(request):
@@ -76,20 +84,21 @@ def newListing(request):
 
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "auctions/newListing.html")
+        return render(request, "auctions/newListing.html", {
+            "form": NewListingForm()
+        })
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing.html", {
-        "listing": listing
+        "listing": listing,
     }) 
 
+# TODO: Toggle listing when watch button is pressed again
 def wishlist(request,listing_id):
     if request.method == "POST":
         currentUser = request.user
-        # Add to wishlist table attached to each user?
         user = User.objects.get(pk=currentUser.id)
         listing = Listing.objects.get(pk=listing_id)
         user.wishlist.add(listing)
-        print(user.wishlist.objects.all())
     return HttpResponseRedirect(reverse("index"))

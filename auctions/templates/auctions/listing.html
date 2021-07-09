@@ -6,10 +6,12 @@
     {% if user.is_authenticated %}
         <form action="{% url 'wishlist' listing.id %}" method="POST">
             {% csrf_token %}
-            
-                <input type="submit" value="Wishlist" method="POST">
-
-                <p>already in lsit</p>
+            {{ user.wishlist.all }}
+            {% if listing in user.wishlist.all %}
+                <input type="submit" value="Remove From Wishlist" method="POST">
+            {% else %}
+                <input type="submit" value="Add to Wishlist" method="POST">
+            {% endif %}
 
         </form>
     {% endif %}
