@@ -2,14 +2,14 @@
 ## For CS50w Project 2
 
 * ~~Listing Model~~
-* ~~Create Listing Page~~ (needs styling)
+* ~~Create Listing Page~~
 * ~~Bid Model~~
 * ~~Comment Model~~
-* ~~Active Listing Page~~ (needs styling, display image, price)
+* ~~Active Listing Page~~
 * ~~Listing Page - Comment Form~~
 * ~~Listing Page - End Auction~~
-* Listing Page - Bid Form
-* Watchlist (needs toggle functionality)
+* ~~Listing Page - Bid Form~~ (needs error handling)
+* ~~Watchlist~~ (needs toggle functionality)
 * Categories
 
 ### 07.08.2021
