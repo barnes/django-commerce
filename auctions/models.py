@@ -20,7 +20,7 @@ class Listing(models.Model):
     
 
     def __str__(self):
-        return f"{self.title}: {self.startingBid}"
+        return f"{self.title}"
 
 class Comment(models.Model):
     listing = models.ForeignKey('Listing', on_delete=models.CASCADE, related_name="comment")

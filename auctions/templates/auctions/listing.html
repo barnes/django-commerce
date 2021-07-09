@@ -3,11 +3,35 @@
 {% block body %}
 
     <h2>Listing: {{ listing.title }}</h2>
+
+    <!-- if there are bids, show high bid, else show inital bid -->
+    {% if maxBid %}
+        <h3>Current bid: {{ maxBid.bidAmount }}</h3>
+    {% else %}
+        <h3> Current bid: {{ listing.startingBid }}</h3>
+    {% endif %}
+
+    {% for comment in comments %}
+            <p><em>{{ comment.content }}</em> by <em>{{ comment.user }}</em></p>
+    {% endfor %}
+
+
+
     {% if user.is_authenticated %}
         {% if listing.active %}
             <em>Auction is ACTIVE</em>
+            <form action="{% url 'bid' listing.id %}" method="POST">
+                {% csrf_token %}
+                {{ bidForm }}
+                <input type="submit" value="Submit Bid" method="POST">
+            </form>
         {% else %}
             <em>Auction is INACTIVE</em>
+            <form action="{% url 'bid' listing.id %}" method="POST">
+                {% csrf_token %}
+                {{ bidForm }}
+                <input type="submit" value="Submit Bid" method="POST" disabled>
+            </form>
         {% endif %}
         {% if listing.user == user %}
             <form action="{% url 'toggleAuction' listing.id %}" method="POST">
@@ -31,11 +55,12 @@
             <input type="submit" value="Post Comment" method="POST">
         </form>
 
-        {% for comment in comments %}
-            <p><em>{{ comment.content }}</em> by <em>{{ comment.user }}</em></p>
-        {% endfor %}
         
+    
+    {% else %}
+        <p>Please create an account to bid or comment.</p>
     {% endif %}
+    
     
 
     

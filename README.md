@@ -20,8 +20,10 @@ conditionals for toggling the wishlist item.
 Comment form is functional on listing page. All comments are being displayed. 
 Bid model has been created. Need to implement the bid form, and the weird conditions for ensuring the bid is higher than the current bid amount. 
 Code needs to be refactored for sure, feels like its a touch out of control.
+Bids working now, but need error handling.
 
 IMG Sources:
 https://unsplash.com/photos/reEySFadyJQ
 https://unsplash.com/photos/_H0fjILH5Vw
 https://unsplash.com/photos/tG36rvCeqng
+https://unsplash.com/photos/FTfjMijq-Ws

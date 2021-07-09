@@ -1,11 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models.query import prefetch_related_objects
+from django.db.utils import Error
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django import forms
-from .models import User, Listing, Comment
+from .models import User, Listing, Comment, Bid
 
 # Not in use; need to know how to apply Bootstrap styles to auto-generated forms.
 class NewListingForm(forms.Form):
@@ -16,6 +18,9 @@ class NewListingForm(forms.Form):
 
 class NewCommentForm(forms.Form):
     content = forms.CharField(label="Comment")
+
+class NewBidForm(forms.Form):
+    bid = forms.IntegerField(label="Bid Amount")
 
 
 
@@ -93,12 +98,20 @@ def newListing(request):
             "form": NewListingForm()
         })
 
+# TODO take in bids, filter for highest and display.
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
+    bids = Bid.objects.filter(listing=listing)
+    orderedbids = bids.order_by('bidAmount')
+    maxBid =orderedbids.last()
+
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "comments": Comment.objects.filter(listing=listing),
-        "commentForm": NewCommentForm()
+        "commentForm": NewCommentForm(),
+        "maxBid": maxBid,
+        "bidForm": NewBidForm()
     }) 
 
 # TODO: Toggle listing when watch button is pressed again
@@ -131,3 +144,24 @@ def toggleAuction(request, listing_id):
             print(currentListing.active)
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
+def bid(request, listing_id):
+    if request.method == "POST":
+        theUser = request.user
+        currentUser = User.objects.get(pk=theUser.id)
+        listing = Listing.objects.get(pk=listing_id)
+        if Bid.objects.filter(listing=listing):
+            bids = Bid.objects.filter(listing=listing)
+            orderedbids = bids.order_by('bidAmount')
+            maxBid =orderedbids.last()
+
+            if int(request.POST["bid"]) > maxBid:
+                Bid.objects.create(bidAmount=request.POST["bid"], user=currentUser, listing=listing )
+        else:
+            maxBid = listing.startingBid
+            if int(request.POST["bid"]) > maxBid:
+                Bid.objects.create(bidAmount=request.POST["bid"], user=currentUser, listing=listing )
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+
+
+        
