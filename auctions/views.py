@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django import forms
-from .models import User, Listing
+from .models import User, Listing, Comment
 
 # Not in use; need to know how to apply Bootstrap styles to auto-generated forms.
 class NewListingForm(forms.Form):
@@ -13,6 +13,9 @@ class NewListingForm(forms.Form):
     description = forms.CharField(label="description")
     image = forms.CharField(label="Image URL")
     startingBid = forms.IntegerField(label="Starting Bid")
+
+class NewCommentForm(forms.Form):
+    content = forms.CharField(label="Comment")
 
 
 
@@ -80,7 +83,9 @@ def newListing(request):
         description = request.POST["description"]
         startingBid = request.POST["startingBid"]
         image = request.POST["image"]
-        newListing = Listing.objects.create(title=title, description=description, startingBid=startingBid, image=image)
+        currentUser = request.user
+        user = User.objects.get(pk=currentUser.id)
+        newListing = Listing.objects.create(title=title, description=description, startingBid=startingBid, image=image, user=user)
 
         return HttpResponseRedirect(reverse("index"))
     else:
@@ -92,6 +97,8 @@ def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing.html", {
         "listing": listing,
+        "comments": Comment.objects.filter(listing=listing),
+        "commentForm": NewCommentForm()
     }) 
 
 # TODO: Toggle listing when watch button is pressed again
@@ -102,3 +109,25 @@ def wishlist(request,listing_id):
         listing = Listing.objects.get(pk=listing_id)
         user.wishlist.add(listing)
     return HttpResponseRedirect(reverse("index"))
+
+def comment(request, listing_id):
+    if request.method == "POST":
+        theUser = request.user
+        currentUser = User.objects.get(pk=theUser.id)
+        currentListing = Listing.objects.get(pk=listing_id)
+        newComment = Comment(content=request.POST["content"], listing=currentListing,user=currentUser)
+        newComment.save()
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+def toggleAuction(request, listing_id):
+    if request.method == "POST":
+        theUser = request.user
+        currentUser = User.objects.get(pk=theUser.id)
+        currentListing = Listing.objects.get(pk=listing_id)
+        print(currentListing.active)
+        if currentListing.user == currentUser:
+            currentListing.active = not currentListing.active
+            currentListing.save()
+            print(currentListing.active)
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+

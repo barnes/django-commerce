@@ -4,16 +4,37 @@
 
     <h2>Listing: {{ listing.title }}</h2>
     {% if user.is_authenticated %}
+        {% if listing.active %}
+            <em>Auction is ACTIVE</em>
+        {% else %}
+            <em>Auction is INACTIVE</em>
+        {% endif %}
+        {% if listing.user == user %}
+            <form action="{% url 'toggleAuction' listing.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Toggle Auction Status" method="POST">
+            </form>
+        {% endif %}
         <form action="{% url 'wishlist' listing.id %}" method="POST">
             {% csrf_token %}
-            {{ user.wishlist.all }}
             {% if listing in user.wishlist.all %}
                 <input type="submit" value="Remove From Wishlist" method="POST">
             {% else %}
                 <input type="submit" value="Add to Wishlist" method="POST">
             {% endif %}
-
         </form>
+
+        <form action="{% url 'comment' listing.id %}" method="POST">
+            {% csrf_token %}
+
+            {{ commentForm }}  
+            <input type="submit" value="Post Comment" method="POST">
+        </form>
+
+        {% for comment in comments %}
+            <p><em>{{ comment.content }}</em> by <em>{{ comment.user }}</em></p>
+        {% endfor %}
+        
     {% endif %}
     
 

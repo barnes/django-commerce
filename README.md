@@ -3,18 +3,25 @@
 
 * ~~Listing Model~~
 * ~~Create Listing Page~~ (needs styling)
-* Bid Model
-* Comment Model
+* ~~Bid Model~~
+* ~~Comment Model~~
 * ~~Active Listing Page~~ (needs styling, display image, price)
-* Listing Page (page made, has wishlist button, but nonfunctional currently.)
-* Watchlist
+* ~~Listing Page - Comment Form~~
+* ~~Listing Page - End Auction~~
+* Listing Page - Bid Form
+* Watchlist (needs toggle functionality)
 * Categories
 
 ### 07.08.2021
 Can create a listing, and view listings. Listings have a wishlist button to add item to a wishlist. Need to add
 conditionals for toggling the wishlist item. 
 
+### 07.09.2021
+Comment form is functional on listing page. All comments are being displayed. 
+Bid model has been created. Need to implement the bid form, and the weird conditions for ensuring the bid is higher than the current bid amount. 
+Code needs to be refactored for sure, feels like its a touch out of control.
+
 IMG Sources:
 https://unsplash.com/photos/reEySFadyJQ
 https://unsplash.com/photos/_H0fjILH5Vw
-
+https://unsplash.com/photos/tG36rvCeqng

@@ -16,6 +16,7 @@ class Listing(models.Model):
     startingBid = models.IntegerField()
     image = models.CharField(max_length=64)
     active = models.BooleanField(default=True)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="listingUser")
     
 
     def __str__(self):
@@ -23,6 +24,19 @@ class Listing(models.Model):
 
 class Comment(models.Model):
     listing = models.ForeignKey('Listing', on_delete=models.CASCADE, related_name="comment")
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="user" )
-    content = models.CharField()
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="commentUser" )
+    content = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"{self.content}"
+
+class Bid(models.Model):
+    bidAmount = models.IntegerField()
+    listing = models.ForeignKey('Listing', on_delete=models.CASCADE, related_name="bidListing")
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="bidUser" )
+
+    def __str__(self):
+        return f"{self.user} bids {self.bidAmount} on {self.listing}"
+
+
 
