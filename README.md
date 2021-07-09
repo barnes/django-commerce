@@ -8,9 +8,10 @@
 * ~~Active Listing Page~~
 * ~~Listing Page - Comment Form~~
 * ~~Listing Page - End Auction~~
-* ~~Listing Page - Bid Form~~ (needs error handling)
-* ~~Watchlist~~ (needs toggle functionality)
+* ~~Listing Page - Bid Form~~
+* ~~Watchlist~~
 * Categories
+* Styling!
 
 ### 07.08.2021
 Can create a listing, and view listings. Listings have a wishlist button to add item to a wishlist. Need to add

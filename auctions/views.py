@@ -98,13 +98,11 @@ def newListing(request):
             "form": NewListingForm()
         })
 
-# TODO take in bids, filter for highest and display.
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     bids = Bid.objects.filter(listing=listing)
     orderedbids = bids.order_by('bidAmount')
     maxBid =orderedbids.last()
-
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
@@ -114,14 +112,16 @@ def listing(request, listing_id):
         "bidForm": NewBidForm()
     }) 
 
-# TODO: Toggle listing when watch button is pressed again
 def wishlist(request,listing_id):
     if request.method == "POST":
         currentUser = request.user
         user = User.objects.get(pk=currentUser.id)
         listing = Listing.objects.get(pk=listing_id)
-        user.wishlist.add(listing)
-    return HttpResponseRedirect(reverse("index"))
+        if listing in user.wishlist.all():  
+            user.wishlist.remove(listing)
+        else:
+            user.wishlist.add(listing)
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 def comment(request, listing_id):
     if request.method == "POST":
@@ -144,6 +144,7 @@ def toggleAuction(request, listing_id):
             print(currentListing.active)
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
+# TODO Error Handling
 def bid(request, listing_id):
     if request.method == "POST":
         theUser = request.user
@@ -153,13 +154,31 @@ def bid(request, listing_id):
             bids = Bid.objects.filter(listing=listing)
             orderedbids = bids.order_by('bidAmount')
             maxBid =orderedbids.last()
-
-            if int(request.POST["bid"]) > maxBid:
+            print(maxBid.bidAmount)
+            if int(request.POST["bid"]) > maxBid.bidAmount:
                 Bid.objects.create(bidAmount=request.POST["bid"], user=currentUser, listing=listing )
+            else: 
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "comments": Comment.objects.filter(listing=listing),
+                    "commentForm": NewCommentForm(),
+                    "maxBid": maxBid,
+                    "bidForm": NewBidForm(),
+                    "error": "Bid Amount Must Be Higher Than Current Bid"
+                }) 
         else:
             maxBid = listing.startingBid
-            if int(request.POST["bid"]) > maxBid:
+            if int(request.POST["bid"]) > maxBid.bidAmount:
                 Bid.objects.create(bidAmount=request.POST["bid"], user=currentUser, listing=listing )
+            else:
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "comments": Comment.objects.filter(listing=listing),
+                    "commentForm": NewCommentForm(),
+                    "maxBid": maxBid,
+                    "bidForm": NewBidForm(),
+                    "error": "Bid Amount Must Be Higher Than Current Bid"
+                }) 
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 

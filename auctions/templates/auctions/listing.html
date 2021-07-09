@@ -25,6 +25,9 @@
                 {{ bidForm }}
                 <input type="submit" value="Submit Bid" method="POST">
             </form>
+            {% if error %}
+                <em>{{ error }}</em>
+            {% endif %}
         {% else %}
             <em>Auction is INACTIVE</em>
             <form action="{% url 'bid' listing.id %}" method="POST">
