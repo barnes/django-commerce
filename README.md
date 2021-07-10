@@ -12,7 +12,8 @@
 * ~~Watchlist~~
 * ~~Categories~~ ~~(Need a page for each category)~~
 * ~~Watchlist Page~~
-* Styling!
+* ~~Styling!~~
+* Deploy?
 
 ### 07.08.2021
 Can create a listing, and view listings. Listings have a wishlist button to add item to a wishlist. Need to add
@@ -26,6 +27,8 @@ Bids working now, but need error handling.
 
 ### 07.10.2021
 All functionality complete, watchlist page, categories and category page. Styling is the final piece of the puzzle.
+
+Styling is done. It isn't great, but its functional.
 
 IMG Sources:
 https://unsplash.com/photos/reEySFadyJQ
