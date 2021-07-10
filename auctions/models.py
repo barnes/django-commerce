@@ -17,8 +17,8 @@ class Listing(models.Model):
     image = models.CharField(max_length=64)
     active = models.BooleanField(default=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="listingUser")
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name="listingCat", blank=True)
     
-
     def __str__(self):
         return f"{self.title}"
 
@@ -37,6 +37,13 @@ class Bid(models.Model):
 
     def __str__(self):
         return f"{self.user} bids {self.bidAmount} on {self.listing}"
+
+class Category(models.Model):
+    category = models.CharField(max_length=64, blank=True)
+
+    def __str__(self):
+        return self.category
+
 
 
 

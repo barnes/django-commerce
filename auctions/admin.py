@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
-from .models import Listing, User, Comment, Bid
+from .models import Category, Listing, User, Comment, Bid
 
 class ListingAdmin(admin.ModelAdmin):
     list_display = ("id","title", "description", "startingBid", "image", "active")
@@ -18,3 +18,4 @@ admin.site.register(Listing, ListingAdmin)
 admin.site.register(User, UsersAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Bid)
+admin.site.register(Category)

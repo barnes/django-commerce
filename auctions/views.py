@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django import forms
-from .models import User, Listing, Comment, Bid
+from .models import Category, User, Listing, Comment, Bid, Category
 
 # Not in use; need to know how to apply Bootstrap styles to auto-generated forms.
 class NewListingForm(forms.Form):
@@ -95,7 +95,8 @@ def newListing(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/newListing.html", {
-            "form": NewListingForm()
+            "form": NewListingForm(),
+            "categories": Category.objects.all()
         })
 
 def listing(request, listing_id):
@@ -180,6 +181,12 @@ def bid(request, listing_id):
                     "error": "Bid Amount Must Be Higher Than Current Bid"
                 }) 
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+def categories(request):
+    return render(request, "auctions/categories.html",{
+        "listings": Listing.objects.all(),
+        "categories": Category.objects.all()
+    })
 
 
 

@@ -10,7 +10,7 @@
 * ~~Listing Page - End Auction~~
 * ~~Listing Page - Bid Form~~
 * ~~Watchlist~~
-* Categories
+* ~~Categories~~
 * Styling!
 
 ### 07.08.2021
