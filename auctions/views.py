@@ -188,6 +188,18 @@ def categories(request):
         "categories": Category.objects.all()
     })
 
+def category(request, category_id):
+    category = Category.objects.get(pk=category_id)
+    listings = Listing.objects.filter(category=category)
+    print(listings)
+    return render(request, "auctions/category.html",{
+        "listings": listings,
+        "category": category
+    })
+
+def watchlist(request):
+    return render(request, "auctions/watchlist.html")
+
 
 
         

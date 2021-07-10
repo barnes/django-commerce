@@ -1,11 +1,10 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    
-    {% for listing in listings %}
-        {% if listing.active == True %}
-            <div class="card m-xl d-inline-block" style="width: 25%; margin:50px">
+<div class="container-sm">
+    <h2 class="text-center display-2">Watchlist for {{ user }}</h2>
+            {% for listing in user.wishlist.all %}
+            <div class="card m-md d-inline-block" style="width: 25%; margin:25px">
                 <img src="{{ listing.image }}" class="card-img-top img-fluid" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">{{ listing.title }}</h5>
@@ -13,7 +12,6 @@
                     <a href="{% url 'listing' listing.id %}" class="btn btn-primary">Go to Listing</a>
                 </div>
             </div>
-        {% endif %}
-        
-    {% endfor %}
+            {% endfor %}
+</div>
 {% endblock %}

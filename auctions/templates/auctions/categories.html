@@ -1,19 +1,22 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings By Category</h2>
-    <!-- {% for listing in listings %}
-        {% for category in categories %}
-            <h3>{{category}}</h3>
-            <ul>
-                {% if category == listing.category %}
-                    <li>{{ listing.title }}</li>
-                {% endif %}
-            </ul>
-        {% endfor %}
-    {% endfor %} -->
 
-    {% for category in categories %}
+    <div class="container-sm" >
+        <h2 class="text-center">Active Listings By Category</h2>
+        {% for category in categories %}
+
+                <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'category' category.id %}">{{ category }}</a>
+                <br />
+
+        {% endfor %}    
+    </div>
+
+    
+
+
+    <!-- Original single page design.
+        {% for category in categories %}
         <h3>{{ category }}</h3>
         {% for listing in listings %}
             {% if listing.category == category %}
@@ -21,6 +24,7 @@
             <br />
             {% endif %}
         {% endfor %}
-    {% endfor %}
+    {% endfor %} 
+    -->
 
 {% endblock %}

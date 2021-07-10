@@ -10,7 +10,8 @@
 * ~~Listing Page - End Auction~~
 * ~~Listing Page - Bid Form~~
 * ~~Watchlist~~
-* ~~Categories~~
+* ~~Categories~~ ~~(Need a page for each category)~~
+* ~~Watchlist Page~~
 * Styling!
 
 ### 07.08.2021
@@ -22,6 +23,9 @@ Comment form is functional on listing page. All comments are being displayed.
 Bid model has been created. Need to implement the bid form, and the weird conditions for ensuring the bid is higher than the current bid amount. 
 Code needs to be refactored for sure, feels like its a touch out of control.
 Bids working now, but need error handling.
+
+### 07.10.2021
+All functionality complete, watchlist page, categories and category page. Styling is the final piece of the puzzle.
 
 IMG Sources:
 https://unsplash.com/photos/reEySFadyJQ

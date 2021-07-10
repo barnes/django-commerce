@@ -1,72 +1,100 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<div class="container-sm">
 
-    <h2>Listing: {{ listing.title }}</h2>
 
-    <!-- if there are bids, show high bid, else show inital bid -->
-    {% if maxBid %}
-        <h3>Current bid: {{ maxBid.bidAmount }}</h3>
-    {% else %}
-        <h3> Current bid: {{ listing.startingBid }}</h3>
-    {% endif %}
+    <div class="container">
+        <div class="row">
+          <div class="col-8">
+            <div class="card m-md d-inline-block" style="width: 100">
+                <h1 class="text-center card-header display-2">{{ listing.title }}</h1>
+                <img src="{{ listing.image }}" class="card-img-top img-fluid" alt="...">
+                <div class="card-body">
+                    <p class="card-text">{{ listing.description }}</p>
+                </div>
+            </div>
+          </div>
 
-    {% for comment in comments %}
-            <p><em>{{ comment.content }}</em> by <em>{{ comment.user }}</em></p>
-    {% endfor %}
+          <div class="col-4">
+              <div class="alert alert-success">
+                {% if maxBid %}
+                    <h3>Current bid: {{ maxBid.bidAmount }}</h3>
+                {% else %}
+                    <h3> Current bid: {{ listing.startingBid }}</h3>
+                {% endif %}    
+              </div>
+            
+              {% if user.is_authenticated %}
+              <div class="card" style="margin-bottom: 5px;">
+                {% if listing.active %}
+                <h3 class="card-header">Auction is ACTIVE</h3>
+                <div class="card-body">
+                    <form action="{% url 'bid' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ bidForm }}
+                        <input class="btn btn-primary btn-block" type="submit" value="Submit Bid" method="POST">
+                    </form>
+                    {% if error %}
+                        <em>{{ error }}</em>
+                    {% endif %}
+                {% else %}
+                    <h3 class="card-header">Auction is INACTIVE</h3>
+                    <form action="{% url 'bid' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ bidForm }}
+                        <input class="btn btn-primary btn-block" type="submit" value="Submit Bid" method="POST" disabled>
+                    </form>
+            {% endif %}
+            </div>
+            <div class="card" style=" margin-bottom: 5px;">
+                <h3 class="card-header">Comments</h3>
+                <div class="card-body">
+                        {% for comment in comments %}
+                            <p><em>{{ comment.content }}</em> by <em>{{ comment.user }}</em></p>
+                        {% endfor %}
+                    <form action="{% url 'comment' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ commentForm }}  
+                        <input class="btn btn-primary btn-block" type="submit" value="Post Comment" method="POST">
+                    </form>
+                </div>
+            </div>
+              {% else %}
+                  <p>Please create an account to bid or comment.</p>
+              {% endif %}
+            </div>
+            
+                <div class="card" style="padding:10px; margin-bottom: 5px;">
+                    {% if listing.user == user %}
+                        <form action="{% url 'toggleAuction' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <input class="btn btn-primary btn-block" type="submit" value="Toggle Auction Status" method="POST">
+                            <br />
+                        </form>
+                     {% endif %}
+                    <form action="{% url 'wishlist' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {% if listing in user.wishlist.all %}
+                            <input class="btn btn-primary btn-block"  type="submit" value="Remove From Wishlist" method="POST">
+                        {% else %}
+                            <input class="btn btn-primary btn-block" type="submit" value="Add to Wishlist" method="POST">
+                        {% endif %}
+                    </form>
+                </div>
+                
+            
+          </div>
+
+        </div>
+      </div>
 
 
 
     {% if user.is_authenticated %}
-        {% if listing.active %}
-            <em>Auction is ACTIVE</em>
-            <form action="{% url 'bid' listing.id %}" method="POST">
-                {% csrf_token %}
-                {{ bidForm }}
-                <input type="submit" value="Submit Bid" method="POST">
-            </form>
-            {% if error %}
-                <em>{{ error }}</em>
-            {% endif %}
-        {% else %}
-            <em>Auction is INACTIVE</em>
-            <form action="{% url 'bid' listing.id %}" method="POST">
-                {% csrf_token %}
-                {{ bidForm }}
-                <input type="submit" value="Submit Bid" method="POST" disabled>
-            </form>
-        {% endif %}
-        {% if listing.user == user %}
-            <form action="{% url 'toggleAuction' listing.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Toggle Auction Status" method="POST">
-            </form>
-        {% endif %}
-        <form action="{% url 'wishlist' listing.id %}" method="POST">
-            {% csrf_token %}
-            {% if listing in user.wishlist.all %}
-                <input type="submit" value="Remove From Wishlist" method="POST">
-            {% else %}
-                <input type="submit" value="Add to Wishlist" method="POST">
-            {% endif %}
-        </form>
 
-        <form action="{% url 'comment' listing.id %}" method="POST">
-            {% csrf_token %}
-
-            {{ commentForm }}  
-            <input type="submit" value="Post Comment" method="POST">
-        </form>
-
-        
-    
     {% else %}
         <p>Please create an account to bid or comment.</p>
     {% endif %}
-    
-    
-
-    
-
-
+</div>
 {% endblock %}
